@@ -222,7 +222,7 @@ class ReportActionCompose extends React.Component {
                                                 onAttachmentPickerSelected={() => {
                                                     openPicker({
                                                         onPicked: (file) => {
-                                                            if (file) { displayFileInModal({file}); }
+                                                            displayFileInModal({file});
                                                         },
                                                     });
                                                 }}
