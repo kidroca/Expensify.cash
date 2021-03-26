@@ -30,12 +30,6 @@ const propTypes = {
     // The ID of the report actions will be created for
     reportID: PropTypes.number.isRequired,
 
-    // Details about any modals being used
-    modal: PropTypes.shape({
-        // Indicates if there is a modal currently visible or not
-        isVisible: PropTypes.bool,
-    }),
-
     // The report currently being looked at
     report: PropTypes.shape({
 
@@ -48,7 +42,6 @@ const propTypes = {
 
 const defaultProps = {
     comment: '',
-    modal: {},
 };
 
 class ReportActionCompose extends React.Component {
@@ -78,11 +71,8 @@ class ReportActionCompose extends React.Component {
             this.comment = this.props.comment;
         }
 
-        // When any modal goes from visible to hidden or when the report ID changes, bring focus to the compose field
-        if (
-            (prevProps.modal.isVisible && !this.props.modal.isVisible)
-            || (prevProps.reportID !== this.props.reportID)
-        ) {
+        // When the report ID changes, bring focus to the compose field
+        if (prevProps.reportID !== this.props.reportID) {
             this.setIsFocused(true);
         }
     }
@@ -204,6 +194,7 @@ class ReportActionCompose extends React.Component {
                 >
                     <AttachmentModal
                         title="Upload Attachment"
+                        onModalHide={() => this.setIsFocused(true)}
                         onConfirm={(file) => {
                             addAction(this.props.reportID, '', file);
                             this.setTextInputShouldClear(false);
@@ -313,9 +304,6 @@ export default compose(
     withOnyx({
         comment: {
             key: ({reportID}) => `${ONYXKEYS.COLLECTION.REPORT_DRAFT_COMMENT}${reportID}`,
-        },
-        modal: {
-            key: ONYXKEYS.MODAL,
         },
         report: {
             key: ({reportID}) => `${ONYXKEYS.COLLECTION.REPORT}${reportID}`,
