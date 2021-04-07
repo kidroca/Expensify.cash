@@ -19,6 +19,12 @@ const propTypes = {
     /* Is the view ready to be displayed */
     isReady: PropTypes.bool.isRequired,
 
+    /* Data about the currently loaded report */
+    report: PropTypes.shape({
+        /* The ID of the currently loaded report */
+        reportID: PropTypes.number,
+    }).isRequired,
+
     /* Is the report view covered by the drawer */
     isDrawerOpen: PropTypes.bool.isRequired,
 
@@ -39,6 +45,7 @@ function ReportView(props) {
                 <SwipeableView onSwipeDown={() => Keyboard.dismiss()}>
                     <ReportActionCompose
                         onSubmit={text => addAction(props.reportID, text)}
+                        report={props.report}
                         reportID={props.reportID}
                     />
                 </SwipeableView>

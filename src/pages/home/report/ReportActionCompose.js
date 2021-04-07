@@ -302,8 +302,5 @@ export default compose(
         modal: {
             key: ONYXKEYS.MODAL,
         },
-        report: {
-            key: ({reportID}) => `${ONYXKEYS.COLLECTION.REPORT}${reportID}`,
-        },
     }),
 )(ReportActionCompose);

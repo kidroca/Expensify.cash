@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {View} from 'react-native';
+import {withOnyx} from 'react-native-onyx';
 import styles from '../../styles/styles';
 import ReportView from './report/ReportView';
 import ScreenWrapper from '../../components/ScreenWrapper';
 import HeaderView from './HeaderView';
+import ONYXKEYS from '../../ONYXKEYS';
+import compose from '../../libs/compose';
 
 const propTypes = {
     /* Navigation api provided by react navigation */
@@ -21,6 +24,16 @@ const propTypes = {
             reportID: PropTypes.string,
         }).isRequired,
     }).isRequired,
+
+    /* Data about the currently loaded report */
+    loadedReport: PropTypes.shape({
+        /* The ID of the currently loaded report */
+        reportID: PropTypes.number,
+    }),
+};
+
+const defaultProps = {
+    loadedReport: {},
 };
 
 class ReportScreen extends React.Component {
@@ -37,14 +50,18 @@ class ReportScreen extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        // Reports changed, reset and load new data
-        if (this.props.route.params.reportID !== prevProps.route.params.reportID) {
-            this.prepareTransition();
-        }
-    }
+        const reportChanged = this.props.route.params.reportID !== prevProps.route.params.reportID;
 
-    componentWillUnmount() {
-        clearTimeout(this.loadingTimerId);
+        if (reportChanged) {
+            this.prepareTransition();
+            return;
+        }
+
+        const reportLoaded = this.getReportID() === this.props.loadedReport.reportID;
+
+        if (this.state.isLoading && reportLoaded) {
+            this.completeTransition();
+        }
     }
 
     /**
@@ -67,15 +84,18 @@ class ReportScreen extends React.Component {
     }
 
     /**
-     * Configures a small loading transition of fixed time and proceeds with rendering available data
+     * Configures a small loading transition until ONYX provides data for the current reportID
      */
     prepareTransition() {
-        if (!this.getReportID()) { return; }
-
         this.setState({isLoading: true});
+    }
 
-        clearTimeout(this.loadingTimerId);
-        this.loadingTimerId = setTimeout(() => this.setState({isLoading: false}), 300);
+    /**
+     * We're ready to render the new data
+     */
+    completeTransition() {
+        // We can a small delay here to cover ongoing rendering with the loader
+        this.setState({isLoading: false});
     }
 
     render() {
@@ -95,6 +115,7 @@ class ReportScreen extends React.Component {
                 <View style={[styles.dFlex, styles.flex1]}>
                     <ReportView
                         isReady={this.isReadyToDisplayReport()}
+                        report={this.props.loadedReport}
                         reportID={this.getReportID()}
                     />
                 </View>
@@ -104,4 +125,12 @@ class ReportScreen extends React.Component {
 }
 
 ReportScreen.propTypes = propTypes;
-export default ReportScreen;
+ReportScreen.defaultProps = defaultProps;
+
+export default compose(
+    withOnyx({
+        loadedReport: {
+            key: ({route}) => `${ONYXKEYS.COLLECTION.REPORT}${route.params.reportID}`,
+        },
+    }),
+)(ReportScreen);
