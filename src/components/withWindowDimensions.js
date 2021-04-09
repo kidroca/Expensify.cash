@@ -15,6 +15,9 @@ const windowDimensionsPropTypes = {
     isSmallScreenWidth: PropTypes.bool.isRequired,
 };
 
+let elementCounter = 0;
+let newDimensionCounter = 0;
+
 export default function (WrappedComponent) {
     class withWindowDimensions extends Component {
         constructor(props) {
@@ -32,10 +35,12 @@ export default function (WrappedComponent) {
         }
 
         componentDidMount() {
+            console.info('[withWindowDimensions] mounted! element count: ', ++elementCounter);
             Dimensions.addEventListener('change', this.onDimensionChange);
         }
 
         componentWillUnmount() {
+            console.info('[withWindowDimensions] unmounted! element counter: ', --elementCounter);
             Dimensions.removeEventListener('change', this.onDimensionChange);
         }
 
@@ -46,6 +51,7 @@ export default function (WrappedComponent) {
          * @param {Object} newDimensions Dimension object containing updated window and screen dimensions
          */
         onDimensionChange(newDimensions) {
+            console.info('[withWindowDimensions] onDimensionChange total calls: ', ++newDimensionCounter);
             const {window} = newDimensions;
             const isSmallScreenWidth = window.width <= variables.mobileResponsiveWidthBreakpoint;
             this.setState({
