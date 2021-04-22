@@ -1,4 +1,5 @@
 import {AppRegistry} from 'react-native';
+import 'resize-observer-polyfill/dist/ResizeObserver.global';
 import checkForUpdates from '../libs/checkForUpdates';
 import Config from '../CONFIG';
 import HttpUtils from '../libs/HttpUtils';
