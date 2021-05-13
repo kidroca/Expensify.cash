@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {getPathFromState, NavigationContainer} from '@react-navigation/native';
+import Onyx from 'react-native-onyx';
 import {navigationRef} from './Navigation';
 import linkingConfig from './linkingConfig';
 import AppNavigator from './AppNavigator';
@@ -30,6 +31,26 @@ class NavigationRoot extends Component {
 
         const path = getPathFromState(state, linkingConfig.config);
         setCurrentURL(path);
+
+        if (Onyx.isCapturingMetrics) {
+            this.printMetrics();
+        }
+    }
+
+    printMetrics() {
+        const data = Onyx.getMetrics().map(call => ({
+            method: `Onyx.${call.methodName}`,
+            startTime: Math.round(call.startTime),
+            endTime: Math.round(call.endTime),
+            duration: Math.round(call.endTime - call.startTime),
+            args: JSON.stringify(call.args),
+            result: JSON.stringify(call.result),
+        }));
+
+        // eslint-disable-next-line no-console
+        console.table(data);
+
+        Onyx.resetMetrics();
     }
 
     render() {

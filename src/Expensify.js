@@ -2,6 +2,7 @@ import lodashGet from 'lodash/get';
 import PropTypes from 'prop-types';
 import React, {PureComponent} from 'react';
 import {View, StatusBar, AppState} from 'react-native';
+import Config from 'react-native-config';
 import Onyx, {withOnyx} from 'react-native-onyx';
 
 import BootSplash from './libs/BootSplash';
@@ -21,6 +22,7 @@ import Visibility from './libs/Visibility';
 Onyx.init({
     keys: ONYXKEYS,
     safeEvictionKeys: [ONYXKEYS.COLLECTION.REPORT_ACTIONS],
+    captureMetrics: Config.BENCHMARK_ONYX,
     initialKeyStates: {
 
         // Clear any loading and error messages so they do not appear on app startup
