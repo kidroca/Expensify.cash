@@ -39,7 +39,7 @@ class NavigationRoot extends Component {
 
     printMetrics() {
         const data = Onyx.getMetrics().map(call => ({
-            method: `Onyx.${call.methodName}`,
+            method: call.methodName,
             startTime: Math.round(call.startTime),
             endTime: Math.round(call.endTime),
             duration: Math.round(call.endTime - call.startTime),
