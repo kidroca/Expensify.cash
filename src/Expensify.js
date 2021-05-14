@@ -43,6 +43,8 @@ Onyx.registerLogger(({level, message}) => {
     }
 });
 
+global.Onyx = Onyx;
+
 const propTypes = {
     /* Onyx Props */
 
