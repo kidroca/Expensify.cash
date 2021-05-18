@@ -43,8 +43,6 @@ class NavigationRoot extends Component {
             startTime: Math.round(call.startTime),
             endTime: Math.round(call.endTime),
             duration: Math.round(call.endTime - call.startTime),
-            args: JSON.stringify(call.args),
-            result: JSON.stringify(call.result),
         }));
 
         // eslint-disable-next-line no-console
