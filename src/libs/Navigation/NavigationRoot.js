@@ -32,23 +32,10 @@ class NavigationRoot extends Component {
         const path = getPathFromState(state, linkingConfig.config);
         setCurrentURL(path);
 
-        if (Onyx.isCapturingMetrics) {
-            this.printMetrics();
+        if (Onyx.printMetrics) {
+            Onyx.printMetrics();
+            Onyx.resetMetrics();
         }
-    }
-
-    printMetrics() {
-        const data = Onyx.getMetrics().map(call => ({
-            method: call.methodName,
-            startTime: Math.round(call.startTime),
-            endTime: Math.round(call.endTime),
-            duration: Math.round(call.endTime - call.startTime),
-        }));
-
-        // eslint-disable-next-line no-console
-        console.table(data);
-
-        Onyx.resetMetrics();
     }
 
     render() {
