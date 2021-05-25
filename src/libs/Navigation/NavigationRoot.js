@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {getPathFromState, NavigationContainer} from '@react-navigation/native';
-import Onyx from 'react-native-onyx';
 import {navigationRef} from './Navigation';
 import linkingConfig from './linkingConfig';
 import AppNavigator from './AppNavigator';
@@ -31,11 +30,6 @@ class NavigationRoot extends Component {
 
         const path = getPathFromState(state, linkingConfig.config);
         setCurrentURL(path);
-
-        if (Onyx.printMetrics) {
-            Onyx.printMetrics();
-            Onyx.resetMetrics();
-        }
     }
 
     render() {

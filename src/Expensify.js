@@ -35,6 +35,9 @@ Onyx.init({
         listenToStorageEvents(onStorageEvent);
     },
 });
+
+global.Onyx = Onyx;
+
 Onyx.registerLogger(({level, message}) => {
     if (level === 'alert') {
         Log.alert(message, 0, {}, false);
