@@ -11,6 +11,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
+import com.facebook.react.bridge.JSIModulePackage;
 import com.facebook.soloader.SoLoader;
 import com.plaid.PlaidPackage;
 import java.lang.reflect.InvocationTargetException;
@@ -58,7 +59,7 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
 
         @Override
         protected JSIModulePackage getJSIModulePackage() {
-          return new ReanimatedJSIModulePackage();
+          return new CustomJsiPackage();
         }
       };
 
