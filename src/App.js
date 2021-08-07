@@ -1,7 +1,8 @@
 import '../wdyr';
-import React from 'react';
+import React, {Profiler} from 'react';
 import {LogBox} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {reactProfilerCallback} from 'react-native-onyx/lib/metering';
 import CustomStatusBar from './components/CustomStatusBar';
 import ErrorBoundary from './components/ErrorBoundary';
 import Expensify from './Expensify';
@@ -29,7 +30,9 @@ const App = () => (
     >
         <CustomStatusBar />
         <ErrorBoundary errorMessage="E.cash crash caught by error boundary">
-            <Expensify />
+            <Profiler id="App" onRender={reactProfilerCallback}>
+                <Expensify />
+            </Profiler>
         </ErrorBoundary>
     </ComposeProviders>
 );

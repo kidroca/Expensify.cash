@@ -12,6 +12,7 @@ import listenToStorageEvents from '../libs/listenToStorageEvents';
 Onyx.init({
     keys: ONYXKEYS,
     safeEvictionKeys: [ONYXKEYS.COLLECTION.REPORT_ACTIONS],
+    captureMetrics: true,
     initialKeyStates: {
 
         // Clear any loading and error messages so they do not appear on app startup
@@ -71,3 +72,5 @@ export {
     withPersonalDetails,
     withReportActionsDrafts,
 };
+
+global.Onyx = Onyx;

@@ -9,7 +9,6 @@ import styles from '../../../styles/styles';
 import withLocalize, {withLocalizePropTypes} from '../../../components/withLocalize';
 import {participantPropTypes} from '../sidebar/optionPropTypes';
 import ExpensiText from '../../../components/Text';
-import Timers from '../../../libs/Timers';
 import CONST from '../../../CONST';
 
 const propTypes = {
@@ -26,14 +25,6 @@ class ParticipantLocalTime extends PureComponent {
         this.state = {
             localTime: this.getParticipantLocalTime(),
         };
-    }
-
-    componentDidMount() {
-        this.timer = Timers.register(setInterval(() => {
-            this.setState({
-                localTime: this.getParticipantLocalTime(),
-            });
-        }, 1000));
     }
 
     componentWillUnmount() {
