@@ -11,14 +11,20 @@ import * as API from '../API';
  * @param {*} [defaultValue]
  */
 function get(name, onyxKey, defaultValue) {
-    API.Get({
+    return API.Get({
         returnValueList: 'nameValuePairs',
         name,
     })
         .then((response) => {
-            const value = lodashGet(response.nameValuePairs, [name], defaultValue || '');
-            if (name === 'isFirstTimeNewExpensifyUser') console.log('[AuthScreens] setting nvp to ', value);
+            let value = lodashGet(response.nameValuePairs, [name], defaultValue || '');
+            if (name === 'isFirstTimeNewExpensifyUser') {
+                value = true;
+                console.log('[AuthScreens] setting nvp to ', value);
+            }
+
             Onyx.set(onyxKey, value);
+
+            return value;
         });
 }
 

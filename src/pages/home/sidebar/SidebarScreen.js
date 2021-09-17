@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {View} from 'react-native';
 import {withOnyx} from 'react-native-onyx';
 import PropTypes from 'prop-types';
-import _ from 'underscore';
 import styles from '../../../styles/styles';
 import SidebarLinks from './SidebarLinks';
 import PopoverMenu from '../../../components/PopoverMenu';
@@ -34,9 +33,6 @@ const propTypes = {
     /** Beta features list */
     betas: PropTypes.arrayOf(PropTypes.string).isRequired,
 
-    /** Flag for new users used to open the Global Create menu on first load */
-    isFirstTimeNewExpensifyUser: PropTypes.bool,
-
     /** The list of this user's policies */
     policies: PropTypes.objectOf(PropTypes.shape({
         /** The type of the policy */
@@ -52,7 +48,6 @@ const propTypes = {
 };
 
 const defaultProps = {
-    isFirstTimeNewExpensifyUser: false,
     policies: {},
 };
 
@@ -68,6 +63,12 @@ class SidebarScreen extends Component {
         this.state = {
             isCreateMenuActive: false,
         };
+
+        /* we want to open the menu for first time experience, and then we flag the experience as complete */
+        NameValuePair
+            .get(CONST.NVP.IS_FIRST_TIME_NEW_EXPENSIFY_USER, ONYXKEYS.NVP_IS_FIRST_TIME_NEW_EXPENSIFY_USER, true)
+            .then(value => this.setState({isCreateMenuActive: value}))
+            .then(() => NameValuePair.set(CONST.NVP.IS_FIRST_TIME_NEW_EXPENSIFY_USER, false, ONYXKEYS.NVP_IS_FIRST_TIME_NEW_EXPENSIFY_USER));
     }
 
     componentDidMount() {
@@ -75,15 +76,6 @@ class SidebarScreen extends Component {
         Timing.start(CONST.TIMING.SIDEBAR_LOADED, true);
 
         console.log('[SidebarScreen] componentDidMount');
-    }
-
-    componentDidUpdate(prevProps) {
-        console.log(`[SidebarScreen] componentDidUpdate (prev:${prevProps.isFirstTimeNewExpensifyUser})(now:${this.props.isFirstTimeNewExpensifyUser})`);
-        if (!prevProps.isFirstTimeNewExpensifyUser && this.props.isFirstTimeNewExpensifyUser) {
-            console.log('!!!!!TOGGLE GLOBAL CREATE!!!!!')
-            this.toggleCreateMenu();
-            NameValuePair.set(CONST.NVP.IS_FIRST_TIME_NEW_EXPENSIFY_USER, false, ONYXKEYS.NVP_IS_FIRST_TIME_NEW_EXPENSIFY_USER);
-        }
     }
 
     /**
@@ -202,10 +194,6 @@ export default compose(
     withOnyx({
         betas: {
             key: ONYXKEYS.BETAS,
-        },
-        isFirstTimeNewExpensifyUser: {
-            key: ONYXKEYS.NVP_IS_FIRST_TIME_NEW_EXPENSIFY_USER,
-            initWithStoredValues: false, // Ensure we always use the value from the server
         },
         policies: {
             key: ONYXKEYS.COLLECTION.POLICY,
