@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {View} from 'react-native';
+import {View, Text, Button, Modal} from 'react-native';
 import {withOnyx} from 'react-native-onyx';
 import PropTypes from 'prop-types';
+
 import _ from 'underscore';
 import styles from '../../../styles/styles';
 import SidebarLinks from './SidebarLinks';
@@ -27,6 +28,7 @@ import ONYXKEYS from '../../../ONYXKEYS';
 import {create} from '../../../libs/actions/Policy';
 import Performance from '../../../libs/Performance';
 import NameValuePair from '../../../libs/actions/NameValuePair';
+import withDrawerState from '../../../components/withDrawerState';
 
 const propTypes = {
     /* Onyx Props */
@@ -65,31 +67,13 @@ class SidebarScreen extends Component {
         this.navigateToSettings = this.navigateToSettings.bind(this);
 
         this.state = {
-            isCreateMenuActive: false,
+            isCreateMenuActive: true,
         };
     }
 
     componentDidMount() {
         Performance.markStart(CONST.TIMING.SIDEBAR_LOADED);
         Timing.start(CONST.TIMING.SIDEBAR_LOADED, true);
-
-        if (this.props.isFirstTimeNewExpensifyUser) {
-            const hasFreePolicy = _.chain(this.props.policies)
-                .some(policy => policy && policy.type === CONST.POLICY.TYPE.FREE && policy.role === CONST.POLICY.ROLE.ADMIN)
-                .value();
-
-            // If user doesn't have any free policies (workspaces) set up, automatically open create menu
-            if (!hasFreePolicy) {
-                // For some reason, the menu doesn't open without the timeout
-                setTimeout(() => {
-                    this.toggleCreateMenu();
-                }, 200);
-            }
-
-            // Set the NVP to false so we don't automatically open the menu again
-            // Note: this may need to be moved if this NVP is used for anything else later
-            NameValuePair.set(CONST.NVP.IS_FIRST_TIME_NEW_EXPENSIFY_USER, false, ONYXKEYS.NVP_IS_FIRST_TIME_NEW_EXPENSIFY_USER);
-        }
     }
 
     /**
@@ -149,50 +133,18 @@ class SidebarScreen extends Component {
                                 onPress={this.toggleCreateMenu}
                             />
                         </View>
-                        <PopoverMenu
-                            onClose={this.toggleCreateMenu}
-                            isVisible={this.state.isCreateMenuActive}
-                            anchorPosition={styles.createMenuPositionSidebar}
-                            animationIn="fadeInLeft"
-                            animationOut="fadeOutLeft"
-                            onItemSelected={this.onCreateMenuItemSelected}
-                            menuItems={[
-                                {
-                                    icon: ChatBubble,
-                                    text: this.props.translate('sidebarScreen.newChat'),
-                                    onSelected: () => Navigation.navigate(ROUTES.NEW_CHAT),
-                                },
-                                {
-                                    icon: Users,
-                                    text: this.props.translate('sidebarScreen.newGroup'),
-                                    onSelected: () => Navigation.navigate(ROUTES.NEW_GROUP),
-                                },
-                                ...(Permissions.canUseIOU(this.props.betas) ? [
-                                    {
-                                        icon: MoneyCircle,
-                                        text: this.props.translate('iou.requestMoney'),
-                                        onSelected: () => Navigation.navigate(ROUTES.IOU_REQUEST),
-                                    },
-                                ] : []),
-                                ...(Permissions.canUseIOU(this.props.betas) ? [
-                                    {
-                                        icon: Receipt,
-                                        text: this.props.translate('iou.splitBill'),
-                                        onSelected: () => Navigation.navigate(ROUTES.IOU_BILL),
-                                    },
-                                ] : []),
-                                ...(Permissions.canUseFreePlan(this.props.betas) ? [
-                                    {
-                                        icon: NewWorkspace,
-                                        iconWidth: 46,
-                                        iconHeight: 40,
-                                        text: this.props.translate('workspace.new.newWorkspace'),
-                                        description: this.props.translate('workspace.new.getTheExpensifyCardAndMore'),
-                                        onSelected: () => create(),
-                                    },
-                                ] : []),
-                            ]}
-                        />
+                        <Modal visible={this.state.isCreateMenuActive}>
+                            <View style={{
+                                flex: 1,
+                                backgroundColor: 'white',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}
+                            >
+                                <Text style={{color: 'red'}}>I am the modal content!</Text>
+                                <Button onPress={this.toggleCreateMenu} title="close" />
+                            </View>
+                        </Modal>
                     </>
                 )}
             </ScreenWrapper>
