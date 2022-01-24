@@ -35,6 +35,13 @@
     "check-metro-bundler-port": "node config/checkMetroBundlerPort.js"
   },
   "dependencies": {
+    "electron-context-menu": "^2.3.0",
+    "electron-log": "^4.3.5",
+    "electron-serve": "^1.0.0",
+    "electron-updater": "^4.3.4",
+    "underscore": "^1.13.1"
+  },
+  "devDependencies": {
     "@formatjs/intl-getcanonicallocales": "^1.5.8",
     "@formatjs/intl-locale": "^2.4.21",
     "@formatjs/intl-numberformat": "^6.2.5",
@@ -57,14 +64,9 @@
     "@react-navigation/drawer": "6.1.8",
     "@react-navigation/native": "6.0.6",
     "@react-navigation/stack": "6.0.11",
-    "babel-plugin-transform-remove-console": "^6.9.4",
     "dom-serializer": "^0.2.2",
     "domhandler": "^4.3.0",
     "dotenv": "^8.2.0",
-    "electron-context-menu": "^2.3.0",
-    "electron-log": "^4.3.5",
-    "electron-serve": "^1.0.0",
-    "electron-updater": "^4.3.4",
     "expensify-common": "git+https://github.com/Expensify/expensify-common.git#9d7193bdad33754680a358b3acf9a8a0a2d89e98",
     "fbjs": "^3.0.2",
     "file-loader": "^6.0.0",
@@ -112,10 +114,7 @@
     "rn-fetch-blob": "^0.12.0",
     "save": "^2.4.0",
     "smoothscroll-polyfill": "^0.4.4",
-    "underscore": "^1.13.1",
-    "urbanairship-react-native": "^11.0.2"
-  },
-  "devDependencies": {
+    "urbanairship-react-native": "^11.0.2",
     "@actions/core": "^1.2.6",
     "@actions/github": "^4.0.0",
     "@babel/core": "^7.11.1",
