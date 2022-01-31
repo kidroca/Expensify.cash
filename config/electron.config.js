@@ -27,4 +27,7 @@ module.exports = {
         './desktop/*.js',
         './src/libs/checkForUpdates.js',
     ],
+    directories: {
+        output: 'desktop-build',
+    },
 };
