@@ -6,6 +6,9 @@ module.exports = {
     },
     mac: {
         category: 'public.app-category.finance',
+        target: [
+            {target: 'dmg', arch: ['x64', 'arm64', 'universal']},
+        ],
         icon: process.env.SHOULD_DEPLOY_PRODUCTION === 'true' ? './desktop/icon.png' : './desktop/icon-stg.png',
         hardenedRuntime: true,
         entitlements: 'desktop/entitlements.mac.plist',
@@ -13,8 +16,6 @@ module.exports = {
         type: 'distribution',
     },
     dmg: {
-        title: 'New Expensify',
-        artifactName: 'NewExpensify.dmg',
         internetEnabled: true,
     },
     publish: [{
