@@ -15,6 +15,10 @@ module.exports = {
     },
     mac: {
         category: 'public.app-category.finance',
+        target: [
+            {target: 'dmg', arch: ['x64', 'arm64']},
+            {target: 'zip', arch: ['x64', 'arm64']},
+        ],
         icon: isStaging ? './desktop/icon-stg.png' : './desktop/icon.png',
         hardenedRuntime: true,
         entitlements: 'desktop/entitlements.mac.plist',
@@ -23,7 +27,8 @@ module.exports = {
     },
     dmg: {
         title: 'New Expensify',
-        artifactName: `NewExpensify${process.env.ARTIFACT_SUFFIX || ''}.dmg`,
+        // eslint-disable-next-line no-template-curly-in-string
+        artifactName: 'NewExpensify-${arch}.dmg',
         internetEnabled: true,
     },
     publish: [{
